@@ -1,3 +1,4 @@
+
 //
 //  ContentView.swift
 //  prueba
@@ -8,14 +9,32 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @ObservedObject var viewModel : MainViewModel = MainViewModel()
+    
+    
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationSplitView {
+            List(
+                viewModel.responseUsers,
+                id: \.id
+            ){user in
+                NavigationLink{
+                    DetailUser(user: user)
+                }label: {
+                    itemUsers(user: user)
+                }
+            }
+            .navigationTitle("USUARIOS")
+            
+        } detail: {
+            
         }
-        .padding()
+        
+        .onAppear{
+            viewModel.getUsers()
+        }
     }
 }
 
